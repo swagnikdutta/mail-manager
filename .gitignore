@@ -1,0 +1,6 @@
+env
+dev-journal.md
+credentials.json
+token.json
+.idea
+*/__pycache__/
