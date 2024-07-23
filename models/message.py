@@ -1,3 +1,6 @@
+import logging
+
+
 class Message:
     def __init__(
             self,
@@ -26,28 +29,27 @@ class Message:
         }
 
     def deserialize(self, data):
-        self.id = data["id"]
-        headers = data["payload"]["headers"]
+        try:
+            self.id = data.get("id")
+            headers = data.get("payload", {}).get("headers", [])
 
-        tmp = next((h for h in headers if h["name"] == "To"), None)
-        if tmp:
-            self.receiver = tmp["value"]
+            self.receiver = self.extract_header(headers, "name", "To")
+            self.sender = self.extract_header(headers, "name", "From")
+            self.subject = self.extract_header(headers, "name", "Subject")
+            self.datetime = self.extract_header(headers, "name", "Date")
+            self.body = data.get("payload", {}).get("body", {}).get("data", "")
+            return self
 
-        tmp = next((h for h in headers if h["name"] == "From"), None)
-        if tmp:
-            self.sender = tmp["value"]
+        except Exception as e:
+            logging.error(f"Error deserializing message: {e}")
+            return None
 
-        tmp = next((h for h in headers if h["name"] == "Subject"), None)
-        if tmp:
-            self.subject = tmp["value"]
-
-        tmp = next((h for h in headers if h["name"] == "Date"), None)
-        if tmp:
-            self.datetime = tmp["value"]
-
-        self.body = data["payload"]["body"]["data"]
-
-        return self
+    @staticmethod
+    def extract_header(headers, k, v):
+        header = next((h for h in headers if h.get(k) == v), None)
+        if header:
+            return header.get("value", "")
+        return None
 
     def __repr__(self):
         return f"Email(id='{self.id}', sender='{self.sender}', receiver='{self.receiver}', subject='{self.subject}')"
