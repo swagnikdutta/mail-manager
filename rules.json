@@ -1,0 +1,31 @@
+[
+  {
+    "applyPredicate": "all",
+    "conditions": [
+      {
+        "name": "from",
+        "predicate": "contains",
+        "value": "tenmiles.com"
+      },
+      {
+        "name": "subject",
+        "predicate": "contains",
+        "value": "interview"
+      },
+      {
+        "name": "date received",
+        "predicate": "is less than",
+        "value": "2 days old"
+      }
+    ],
+    "actions": [
+      {
+        "name": "mark as read"
+      },
+      {
+        "name": "move message",
+        "predicate": "inbox"
+      }
+    ]
+  }
+]
