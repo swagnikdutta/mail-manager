@@ -52,4 +52,4 @@ class Message:
         return None
 
     def __repr__(self):
-        return f"Email(id='{self.id}', sender='{self.sender}', receiver='{self.receiver}', subject='{self.subject}')"
+        return f"Message(id='{self.id}', sender='{self.sender}', receiver='{self.receiver}', subject='{self.subject}')"
