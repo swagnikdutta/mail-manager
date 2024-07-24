@@ -5,7 +5,7 @@ from googleapiclient.discovery import build
 
 from api.gmail_api import list_messages
 from auth.authenticate import authenticate
-from db import setup, insert_message
+from db import setup, insert_message, insert_rule
 from models.rules import Rule
 
 # If modifying these scopes, delete the file token.json
@@ -20,24 +20,35 @@ def run():
     creds = authenticate()
     svc = build("gmail", "v1", credentials=creds)
 
-    message_count = 1
+    # Fetching messages
+    message_count = 5
     messages = list_messages(svc, message_count)
 
+    # Putting messages into database
     for msg in messages:
         insert_message(conn, msg)
 
-    process_rules()
+    # Processing rules and putting them into database
+    process_rules(conn)
+
+    # Applying rules on messages
+    apply_rules(conn)
+
+    # teardown
     teardown(conn)
 
 
-def process_rules():
-    # rules = []
+def process_rules(conn):
     with open("rules.json") as rules_file:
         rules = json.load(rules_file)
 
     for rule in rules:
         rule_obj = Rule().deserialize(rule)
-        # Insert the rule object in the db
+        insert_rule(conn, rule_obj)
+
+
+def apply_rules(conn):
+    pass
 
 
 def teardown(conn):

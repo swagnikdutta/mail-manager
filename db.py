@@ -1,3 +1,4 @@
+import json
 import logging
 import sqlite3
 
@@ -12,11 +13,17 @@ CREATE TABLE IF NOT EXISTS messages (
     datetime TEXT
 )
 """
+INSERT_INTO_MESSAGES = "INSERT INTO messages (id, subject, sender, receiver, datetime) VALUES (?, ?, ?, ?, ?)"
 
-INSERT_INTO_MESSAGES = """
-INSERT INTO messages (id, subject, sender, receiver, datetime)
-VALUES (?, ?, ?, ?, ?)
+CREATE_RULES_TABLE = """
+CREATE TABLE IF NOT EXISTS rules (
+    id INTEGER PRIMARY KEY,
+    apply_predicate TEXT,
+    conditions TEXT,
+    actions TEXT
+)
 """
+INSERT_INTO_RULES = "INSERT INTO rules (apply_predicate, conditions, actions) VALUES (?, ?, ?)"
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +48,7 @@ def create_schema(conn):
     try:
         cursor = conn.cursor()
         cursor.execute(CREATE_MESSAGES_TABLE)
+        cursor.execute(CREATE_RULES_TABLE)
         conn.commit()
     except sqlite3.Error as e:
         logger.error(f"Error creating schema. Error: {e}")
@@ -54,3 +62,14 @@ def insert_message(conn, message):
         conn.commit()
     except sqlite3.Error as e:
         logger.error(f"Error inserting record into table 'messages'")
+
+
+def insert_rule(conn, rule):
+    try:
+        r = rule.serialize()
+        cursor = conn.cursor()
+        cursor.execute(INSERT_INTO_RULES,
+                       (r["apply_predicate"], json.dumps(r["conditions"]), json.dumps(r["actions"])))
+        conn.commit()
+    except sqlite3.Error as e:
+        logger.error(f"Error inserting record into table: 'rule'")
