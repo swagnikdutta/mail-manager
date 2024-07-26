@@ -7,16 +7,14 @@ from database.query import DROP_TABLE_MESSAGES, DROP_TABLE_RULES
 from models.message import Message
 from models.rules import Rule
 
-DATABASE_NAME = "store.db"
-
 logger = logging.getLogger(__name__)
 
 
-def setup():
+def setup(path):
     conn = None
 
     try:
-        conn = sqlite3.connect(DATABASE_NAME)
+        conn = sqlite3.connect(path)
         logger.info(f"Sqlite version: {sqlite3.sqlite_version}")
         create_schema(conn)
         return conn
