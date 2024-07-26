@@ -23,6 +23,15 @@ A desktop app for managing emails in your Gmail account. It enables you to perfo
     cd <repository_folder>
     ```
 2. Place the `credentials.json` file at the root of the folder.
+3. Create a virtual environment and activate it.
+   ```
+   python -m venv <env_name>
+   source <env_name>/bin/activate
+   ```
+4. Install the requirements
+   ```
+   pip install -r requirements.txt
+   ```
 
 ## Configuration
 
@@ -61,14 +70,13 @@ A desktop app for managing emails in your Gmail account. It enables you to perfo
 
 ## Running the Program
 
-1. Run the main program:
+1. Once the config is prepared, run the main program:
     ```sh
     python main.py
     ```
 2. If you're running the program for the first time, you will be asked to allow the permissions the app requires.
 3. Upon successful authorization, a `token.json` file will be created. If you need to update the scopes, delete the existing `token.json` file and run the program again.
 
-## Demo
+## [Demo](https://drive.google.com/file/d/1Vq_1WVbW6SWdsn3COe2XTDmSa64mcclw/view?usp=sharing)
 
-<!-- Add any demo instructions or GIFs/screenshots here -->
 
