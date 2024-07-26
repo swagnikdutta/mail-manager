@@ -3,6 +3,7 @@ import logging
 import sqlite3
 
 from database import query
+from database.query import DROP_TABLE_MESSAGES, DROP_TABLE_RULES
 from models.message import Message
 from models.rules import Rule
 
@@ -30,9 +31,6 @@ def setup():
 def create_schema(conn):
     try:
         cursor = conn.cursor()
-        cursor.execute("DROP TABLE IF EXISTS messages")
-        cursor.execute("DROP TABLE IF EXISTS rule")
-
         cursor.execute(query.CREATE_MESSAGES_TABLE)
         cursor.execute(query.CREATE_RULES_TABLE)
         conn.commit()
@@ -77,7 +75,7 @@ def insert_rule(conn, rule):
         r = rule.serialize()
         cursor = conn.cursor()
         cursor.execute(query.INSERT_INTO_RULES,
-                       (r["apply_predicate"], json.dumps(r["conditions"]), json.dumps(r["actions"])))
+                       (json.dumps(r["conditions"]), json.dumps(r["actions"])))
         conn.commit()
     except sqlite3.Error as e:
         logger.error(f"Error inserting record into table 'rule'. Error: {e}")
@@ -91,13 +89,19 @@ def get_all_rules(conn):
         results = []
 
         for row in rows:
-            r = Rule(
-                apply_predicate=row[1],
-                conditions=json.loads(row[2]),
-                actions=json.loads(row[3])
-            )
+            r = Rule().deserialize({
+                "conditions": json.loads(row[1]),
+                "actions": json.loads(row[2]),
+            })
             results.append(r)
         return results
 
     except sqlite3.Error as e:
         logger.error(f"Error getting rules. Error: {e}")
+
+
+def clean(conn):
+    cursor = conn.cursor()
+    cursor.execute(DROP_TABLE_MESSAGES)
+    cursor.execute(DROP_TABLE_RULES)
+    conn.commit()
