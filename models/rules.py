@@ -130,5 +130,4 @@ class Rule:
             return self
         except Exception as e:
             logger.error(f"Error deserializing Rule. Error: {e}")
-            # Uncomment raise if you want to print an ugly stack trace
-            # raise
+            raise
