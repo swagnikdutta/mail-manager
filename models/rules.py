@@ -1,5 +1,7 @@
 import logging
 
+from models import constants
+
 
 class Condition:
     def __init__(
@@ -63,8 +65,8 @@ class Rule:
             actions=None
     ):
         self.apply_predicate = apply_predicate
-        self.conditions = conditions
-        self.actions = actions
+        self.conditions = [Condition(**c) for c in (conditions or [])]
+        self.actions = [Action(**a) for a in (actions or [])]
 
     def serialize(self):
         return {
@@ -81,16 +83,16 @@ class Rule:
             actions = data.get("actions")
 
             self.apply_predicate = apply_predicate
-            self.conditions = []
-            self.actions = []
+            self.conditions = [Condition(**c) for c in conditions]
+            self.actions = [Action(**a) for a in actions]
 
-            for c in conditions:
-                c_obj = Condition().deserialize(c)
-                self.conditions.append(c_obj)
-
-            for a in actions:
-                a_obj = Action().deserialize(a)
-                self.actions.append(a_obj)
+            # for c in conditions:
+            #     c_obj = Condition().deserialize(c)
+            #     self.conditions.append(c_obj)
+            #
+            # for a in actions:
+            #     a_obj = Action().deserialize(a)
+            #     self.actions.append(a_obj)
 
             return self
 

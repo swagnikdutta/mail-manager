@@ -41,3 +41,11 @@ def list_messages(svc, count=LIST_RESULTS_DEFAULT):
         logger.error(f"Error while listing messages: ${e}")
         # TODO: Not raising an exception here since listing messages isn't critically important
         return None
+
+
+def modify_message(svc, msg_id, req_body):
+    logger = logging.getLogger(__name__)
+    try:
+        svc.users().messages().modify(userId="me", id=msg_id, body=req_body).execute()
+    except Exception as e:
+        logger.error(f"Error modifying message. Error: {e}")

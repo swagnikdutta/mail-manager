@@ -5,26 +5,18 @@
       {
         "name": "from",
         "predicate": "contains",
-        "value": "tenmiles.com"
+        "value": "swagnik07"
       },
       {
         "name": "subject",
         "predicate": "contains",
-        "value": "interview"
-      },
-      {
-        "name": "date received",
-        "predicate": "is less than",
-        "value": "2 days old"
+        "value": "Testing"
       }
     ],
     "actions": [
       {
-        "name": "mark as read"
-      },
-      {
         "name": "move message",
-        "predicate": "inbox"
+        "predicate": "TRASH"
       }
     ]
   }

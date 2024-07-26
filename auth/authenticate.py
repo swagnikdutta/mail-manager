@@ -4,7 +4,13 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
+# If modifying these scopes, delete the file token.json
+SCOPES = [
+    "https://www.googleapis.com/auth/gmail.labels",
+    "https://mail.google.com/",
+    "https://www.googleapis.com/auth/gmail.modify",
+    "https://www.googleapis.com/auth/gmail.readonly",
+]
 
 
 def authenticate():
