@@ -48,7 +48,7 @@ class Message:
             return None
 
     def satisfies_condition(self, condition):
-        field_name = condition.name
+        field_name = condition.field
         predicate = condition.predicate
         value = condition.value
 
