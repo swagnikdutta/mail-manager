@@ -1,24 +1,19 @@
 [
   {
     "conditions": {
-      "apply_predicate": "all",
+      "apply_predicate": "",
       "condition_items": [
         {
-          "field": "from",
-          "predicate": "contains",
-          "value": "swagnik07"
-        },
-        {
-          "field": "subject",
-          "predicate": "contains",
-          "value": "Testing"
+          "field": "",
+          "predicate": "",
+          "value": ""
         }
       ]
     },
     "actions": [
       {
-        "field": "move message",
-        "predicate": "TRASH"
+        "field": "",
+        "predicate": ""
       }
     ]
   }
