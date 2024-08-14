@@ -28,7 +28,7 @@ class ConditionItem:
             return self
         except Exception as e:
             logger.error(f"Error deserializing ConditionItem. Error: {e}")
-            # raise
+            raise
 
     def validate(self):
         allowed_fields = CONDITION_FIELDS_STRING + CONDITION_FIELDS_DATETIME
@@ -84,7 +84,6 @@ class Conditions:
         except Exception as e:
             logger.error(f"Error deserializing Condition. Error: {e}")
             raise
-            # TODO: Should I raise here?
 
     def validate(self):
         if self.apply_predicate not in CONDITION_APPLY_TYPES:
@@ -112,7 +111,6 @@ class Action:
         except Exception as e:
             logger.error(f"Error deserializing Action. Error: {e}")
             raise
-            # TODO: should I raise exception here?
 
     def validate(self):
         if self.field not in ACTION_TYPES:

@@ -28,7 +28,6 @@ def list_messages(svc, count=LIST_RESULTS_DEFAULT):
         messages = response.get("messages", [])
 
         for i, m in enumerate(messages):
-            # TODO: Think if we really need this safety check.
             msg_id = messages[i].get("id", "")
             if msg_id:
                 message = get_message(svc, msg_id)
@@ -39,7 +38,6 @@ def list_messages(svc, count=LIST_RESULTS_DEFAULT):
 
     except Exception as e:
         logger.error(f"Error while listing messages: ${e}")
-        # TODO: Not raising an exception here since listing messages isn't critically important
         return None
 
 
