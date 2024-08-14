@@ -1,7 +1,8 @@
 import logging
 
 from models.constants import CONDITION_FIELDS_STRING, CONDITION_FIELDS_DATETIME, CONDITION_PREDICATES_STRING, \
-    CONDITION_PREDICATES_DATETIME, CONDITION_APPLY_TYPES, ACTION_TYPES, MOVE_MESSAGE, ACTION_MOVE_DESTINATION
+    CONDITION_PREDICATES_DATETIME, CONDITION_APPLY_TYPES, ACTION_TYPES, MOVE_MESSAGE, ACTION_MOVE_DESTINATION, \
+    DATE_RECEIVED
 
 
 class ConditionItem:
@@ -47,6 +48,18 @@ class ConditionItem:
             raise ValueError(f"Predicate '{self.predicate}' not compatible with field '{self.field}'. "
                              f"Allowed predicates for datetime fields: {CONDITION_PREDICATES_DATETIME}")
 
+        if self.field in CONDITION_FIELDS_DATETIME and self.predicate in CONDITION_PREDICATES_DATETIME:
+            tokens = self.value.split()
+
+            length_check = len(tokens) == 2
+            if not length_check:
+                raise ValueError(f"Invalid condition value: '{self.value}' for '{DATE_RECEIVED}' field. Expected format: '<number> [days|months]'")
+
+            digit_check = tokens[0].isdigit()
+            value_check = tokens[1] in ['day', 'days', 'month', 'months']
+
+            if not (digit_check and value_check):
+                raise ValueError(f"Invalid condition value: '{self.value}' for '{DATE_RECEIVED}' field. Expected format: '<number> [days|months]'")
 
 class Conditions:
     def __init__(self, apply_predicate=None, condition_items=None):

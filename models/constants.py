@@ -26,7 +26,7 @@ CONTAINS = "contains"
 DOES_NOT_CONTAIN = "does not contain"
 EQUALS = "equals"
 DOES_NOT_EQUAL = "does not equal"
-LESS_THAN = "is less than"
+LESS_THAN = "is lesser than"
 GREATER_THAN = "is greater than"
 
 CONDITION_APPLY_TYPES = [ALL, ANY]
@@ -57,3 +57,6 @@ ACTION_MOVE_DESTINATION = [
     LABEL_CATEGORY_UPDATES,
     LABEL_CATEGORY_FORUMS
 ]
+
+# If datetime not present
+UNINITIALIZED_TIMESTAMP = -1

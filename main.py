@@ -30,9 +30,14 @@ class Runner:
         with open(self.rules_config_path) as rules_file:
             rules = json.load(rules_file)
 
-        for rule in rules:
-            rule_obj = Rule().deserialize(rule)
-            db.insert_rule(self.conn, rule_obj)
+        try:
+            logger = logging.getLogger(__name__)
+
+            for rule in rules:
+                rule_obj = Rule().deserialize(rule)
+                db.insert_rule(self.conn, rule_obj)
+        except Exception as e:
+            logger.error(f"Error inserting rule into db. Error: {e}")
 
     def fetch_and_store_messages(self):
         message_count = 10
@@ -48,6 +53,7 @@ class Runner:
 
         for m in messages:
             message_id = m.id
+            message_subject = m.subject
 
             for r in rules:
                 rule_applies = False if r.conditions.apply_predicate == constants.ANY else True
@@ -60,7 +66,7 @@ class Runner:
                             rule_applies = rule_applies or m.satisfies_condition(ci)
 
                 if rule_applies:
-                    logger.info(f"Rule applicable on message: {message_id}")
+                    logger.info(f"Rule applicable on message: '{message_subject}'")
 
                     for a in r.actions:
                         payload = {}
@@ -75,15 +81,15 @@ class Runner:
                                     "addLabelIds": [LABEL_UNREAD],
                                     "removeLabelIds": []
                                 }
-                                modify_message(self.svc, message_id, payload)
                             case constants.MOVE_MESSAGE:
                                 target = a.predicate
                                 payload = {
                                     "addLabelIds": [target],
                                     "removeLabelIds": [LABEL_INBOX]
                                 }
-
                         modify_message(self.svc, message_id, payload)
+                else:
+                    logger.info(f"Rule not applicable on message: '{message_subject}'")
 
     def teardown(self):
         db.clean(self.conn)

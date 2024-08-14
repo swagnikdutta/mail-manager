@@ -60,7 +60,7 @@ def get_all_messages(conn):
                 receiver=row[2],
                 subject=row[3],
                 body=row[4],
-                datetime=row[5],
+                msg_datetime=row[5],
             ))
         return results
 

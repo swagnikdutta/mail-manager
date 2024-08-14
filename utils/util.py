@@ -3,6 +3,5 @@ def translate_field_to_header(field):
         'from': 'sender',
         'to': 'receiver',
         'subject': 'subject',
-        'datetime': 'datetime'
     }
-    return d[field]
+    return d.get(field, None)

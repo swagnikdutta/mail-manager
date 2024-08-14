@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS messages (
     receiver TEXT, 
     subject TEXT,
     body TEXT,
-    datetime TEXT
+    datetime INTEGER
 )
 """
 INSERT_INTO_MESSAGES = "INSERT INTO messages (id, sender, receiver, subject, body, datetime) VALUES (?, ?, ?, ?, ?, ?)"
