@@ -1,5 +1,7 @@
-RULES_CONFIG_PATH = "rules.json"
-DATABASE_PATH = "store.db"
+CONFIG_PATH = "config.yaml"
+DATABASE_PATH_KEY = "db_path"
+RULES_CONFIG_PATH_KEY = "rules_config_path"
+
 
 # MESSAGE LABELS
 LABEL_INBOX = "INBOX"

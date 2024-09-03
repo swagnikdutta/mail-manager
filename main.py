@@ -1,12 +1,13 @@
 import json
 import logging
 
+import yaml
 from googleapiclient.discovery import build
 
 from api.gmail_api import list_messages, modify_message
 from auth import auth
 from database import db
-from models.constants import LABEL_UNREAD, LABEL_INBOX, DATABASE_PATH, RULES_CONFIG_PATH
+from models.constants import LABEL_UNREAD, LABEL_INBOX, CONFIG_PATH, DATABASE_PATH_KEY, RULES_CONFIG_PATH_KEY
 from models.rules import Rule
 from models import constants
 
@@ -118,13 +119,19 @@ class RuleApplier:
 
 class Runner:
     def __init__(self):
-        self.app_initializer = AppInitializer(DATABASE_PATH, RULES_CONFIG_PATH)
+        self.config = self.load_config(CONFIG_PATH)
+        self.app_initializer = AppInitializer(self.config[DATABASE_PATH_KEY], self.config[RULES_CONFIG_PATH_KEY])
+
+    @staticmethod
+    def load_config(config_path):
+        with open(config_path, 'r') as f:
+            return yaml.safe_load(f)
 
     def run(self):
         conn, svc = self.app_initializer.setup()
 
         message_fetcher = MessageFetcher(svc, conn)
-        rule_processor = RuleProcessor(conn, RULES_CONFIG_PATH)
+        rule_processor = RuleProcessor(conn, self.config[RULES_CONFIG_PATH_KEY])
         rule_applier = RuleApplier(conn, svc)
 
         rule_processor.process_rules()
