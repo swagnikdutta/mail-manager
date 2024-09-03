@@ -1,0 +1,3 @@
+message_count: 10
+db_path: "store.db"
+rules_config_path: "rules.json"
